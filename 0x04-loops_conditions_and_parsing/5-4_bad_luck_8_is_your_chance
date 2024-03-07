@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#loops from 1 to 10 and
 
 count=0
 

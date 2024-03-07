@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#Tell the story of passwd
 
 while IFS=':' read username password uid gid info home shell; do
   echo "The user $username is part of the $gid gang,"\

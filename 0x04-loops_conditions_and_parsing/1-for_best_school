@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#displays Best School 10 times
 
 for (( value = 0; value < 10; value++ ))
 do
