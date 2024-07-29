@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 """
 Using https://jsonplaceholder.typicode.com
-gathers data from API and exports it to CSV file
+gathers data from API and exports it to JSON file
 Implemented using recursion
 """
+import json
 import re
 import requests
 import sys
@@ -21,13 +22,16 @@ if __name__ == '__main__':
             todos_res = requests.get('{}/todos'.format(API)).json()
             user_name = user_res.get('username')
             todos = list(filter(lambda x: x.get('userId') == id, todos_res))
-            with open('{}.csv'.format(id), 'w') as file:
-                for todo in todos:
-                    file.write(
-                        '"{}","{}","{}","{}"\n'.format(
-                            id,
-                            user_name,
-                            todo.get('completed'),
-                            todo.get('title')
-                        )
-                    )
+            with open("{}.json".format(id), 'w') as json_file:
+                user_data = list(map(
+                    lambda x: {
+                        "task": x.get("title"),
+                        "completed": x.get("completed"),
+                        "username": user_name
+                    },
+                    todos
+                ))
+                user_data = {
+                    "{}".format(id): user_data
+                }
+                json.dump(user_data, json_file)
