@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""gather data from an API and display completed tasks"""
+"""gather data from an API and save at csv file"""
+import csv
 import requests
 import sys
 
@@ -7,7 +8,7 @@ url = 'https://jsonplaceholder.typicode.com/'
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        employee_id = int(sys.argv[1])
+        employee_id = sys.argv[1]
 
         users_response = requests.get(f'{url}users/{employee_id}')
 
@@ -20,15 +21,9 @@ if __name__ == '__main__':
         todos_response = requests.get(f'{url}/todos', params=params)
         todos_data = todos_response.json()
 
-        completed_tasks = []
-        for todo in todos_data:
-            if todo['completed']:
-                completed_tasks.append(todo['title'])
-
-        print(
-            f"Employee {employee_name} is done with tasks "
-            f"({len(completed_tasks)}/{len(todos_data)}):"
-        )
-
-        for i in completed_tasks:
-            print(f"\t {i}")
+        with open(f'{employee_id}.csv', 'w', newline='') as file:
+            csv_writer = csv.writer(file, quoting=csv.QUOTE_ALL)
+            for todo in todos_data:
+                csv_writer.writerow([str(employee_id), str(employee_name),
+                                    str(todo['completed']), str(todo['title'])]
+                                    )
